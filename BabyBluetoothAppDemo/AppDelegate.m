@@ -1,9 +1,3 @@
-//
-//  AppDelegate.m
-//  BabyBluetoothAppDemo
-//
-
-
 #import "AppDelegate.h"
 #import <CoreBluetooth/CoreBluetooth.h>
 #import "BabyBluetooth.h"

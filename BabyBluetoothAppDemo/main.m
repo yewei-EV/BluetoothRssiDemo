@@ -1,9 +1,3 @@
-//
-//  main.m
-//  BabyBluetoothAppDemo
-//
-
-
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
 

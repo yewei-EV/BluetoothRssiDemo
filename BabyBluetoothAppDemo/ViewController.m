@@ -1,8 +1,3 @@
-//
-//  ViewController.m
-//  BabyBluetoothAppDemo
-//
-
 #import "ViewController.h"
 #import "SVProgressHUD.h"
 
@@ -23,13 +18,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [SVProgressHUD showInfoWithStatus:@"准备打开设备"];
+    [SVProgressHUD showInfoWithStatus:@"Ready to open device"];
     NSLog(@"viewDidLoad");
     peripheralDataArray = [[NSMutableArray alloc]init];
     
-    //初始化BabyBluetooth 蓝牙库
+    //Initialize BabyBluetooth wrap
     baby = [BabyBluetooth shareBabyBluetooth];
-    //设置蓝牙委托
+    //Set bluetooth Delegate
     [self babyDelegate];
  
 }
@@ -38,9 +33,9 @@
 
 -(void)viewDidAppear:(BOOL)animated{
     NSLog(@"viewDidAppear");
-    //停止之前的连接
+    //Stop preivous connectiong
     [baby cancelAllPeripheralsConnection];
-    //设置委托后直接可以使用，无需等待CBCentralManagerStatePoweredOn状态。
+    //directly use without waiting for CBCentralManagerStatePoweredOn
     baby.scanForPeripherals().begin();
     //baby.scanForPeripherals().begin().stop(10);
 }
@@ -49,55 +44,44 @@
     NSLog(@"viewWillDisappear");
 }
 
-#pragma mark -蓝牙配置和操作
+#pragma mark -Bluetooth config and control
 
-//蓝牙网关初始化和委托方法设置
+//Bluetooth Delegate setting
 -(void)babyDelegate{
     
     __weak typeof(self) weakSelf = self;
     [baby setBlockOnCentralManagerDidUpdateState:^(CBCentralManager *central) {
         if (central.state == CBCentralManagerStatePoweredOn) {
-            [SVProgressHUD showInfoWithStatus:@"设备打开成功，开始扫描设备"];
+            [SVProgressHUD showInfoWithStatus:@"Device open, start scaning"];
         }
     }];
     
-    //设置扫描到设备的委托
+    //Store previous two rssi value
+    static NSNumber * prev_rssi;
+    static NSNumber * prevprev_rssi;
+    //Handle Delegate
     [baby setBlockOnDiscoverToPeripherals:^(CBCentralManager *central, CBPeripheral *peripheral, NSDictionary *advertisementData, NSNumber *RSSI) {
-        NSLog(@"搜索到了设备:%@",peripheral.name);
-        //NSLog(@"他的RSSI:%@",RSSI);
+        NSNumber * avag_rssi;
+        if (prev_rssi == NULL) {
+            prev_rssi = RSSI;
+        }
+        if (prevprev_rssi == NULL) {
+            prevprev_rssi = RSSI;
+        }
+        avag_rssi = @(([RSSI intValue] + [prev_rssi intValue] + [prevprev_rssi intValue])/3);
+        //NSLog(@"%@ has RSSI: %@ and %@",peripheral.name, RSSI, avag_rssi);
+        NSLog(@"%@ has RSSI: %@ ",peripheral.name, RSSI);
+        prevprev_rssi = prev_rssi;
+        prev_rssi = avag_rssi;
         [weakSelf insertTableView:peripheral advertisementData:advertisementData RSSI:RSSI];
     }];
     
-   
-    //设置发现设service的Characteristics的委托
-    [baby setBlockOnDiscoverCharacteristics:^(CBPeripheral *peripheral, CBService *service, NSError *error) {
-        NSLog(@"===service name:%@",service.UUID);
-        for (CBCharacteristic *c in service.characteristics) {
-            NSLog(@"charateristic name is :%@",c.UUID);
-        }
-    }];
-    //设置读取characteristics的委托
-    [baby setBlockOnReadValueForCharacteristic:^(CBPeripheral *peripheral, CBCharacteristic *characteristics, NSError *error) {
-        NSLog(@"characteristic name:%@ value is:%@",characteristics.UUID,characteristics.value);
-    }];
-    //设置发现characteristics的descriptors的委托
-    [baby setBlockOnDiscoverDescriptorsForCharacteristic:^(CBPeripheral *peripheral, CBCharacteristic *characteristic, NSError *error) {
-        NSLog(@"===characteristic name:%@",characteristic.service.UUID);
-        for (CBDescriptor *d in characteristic.descriptors) {
-            NSLog(@"CBDescriptor name is :%@",d.UUID);
-        }
-    }];
-    //设置读取Descriptor的委托
-    [baby setBlockOnReadValueForDescriptors:^(CBPeripheral *peripheral, CBDescriptor *descriptor, NSError *error) {
-        NSLog(@"Descriptor name:%@ value is:%@",descriptor.characteristic.UUID, descriptor.value);
-    }];
     
-
-    //设置查找设备的过滤器
+    //Set searching filter
     [baby setFilterOnDiscoverPeripherals:^BOOL(NSString *peripheralName, NSDictionary *advertisementData, NSNumber *RSSI) {
         
-        //最常用的场景是查找某一个前缀开头的设备
-        if ([peripheralName hasPrefix:@"BrtBeacon"] ) {
+        //Only search device with this prefix
+        if ([peripheralName hasPrefix:@"BrtBeacon01"] ) {
             return YES;
         }
         return NO;
@@ -114,20 +98,17 @@
     }];
     
     
-    //示例:
-    //扫描选项->CBCentralManagerScanOptionAllowDuplicatesKey:忽略同一个Peripheral端的多个发现事件被聚合成一个发现事件
+    //Ignore same Peripherals found
     NSDictionary *scanForPeripheralsWithOptions = @{CBCentralManagerScanOptionAllowDuplicatesKey:@YES};
-    //连接设备->
+    //connect device->
     [baby setBabyOptionsWithScanForPeripheralsWithOptions:scanForPeripheralsWithOptions connectPeripheralWithOptions:nil scanForPeripheralsWithServices:nil discoverWithServices:nil discoverWithCharacteristics:nil];
     
 
 }
 
-#pragma mark -UIViewController 方法
-//插入table数据
+#pragma mark -UIViewController method
+//insert table data
 -(void)insertTableView:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI{
-    NSLog(@"%@的RSSI: %@",peripheral.name,RSSI);
-    
     
     NSArray *peripherals = [peripheralDataArray valueForKey:@"peripheral"];
     if(![peripherals containsObject:peripheral]) {
@@ -137,7 +118,7 @@
         
         NSMutableDictionary *item = [[NSMutableDictionary alloc] init];
         [item setValue:peripheral forKey:@"peripheral"];
-        //[item setValue:RSSI forKey:@"RSSI"];
+        [item setValue:RSSI forKey:@"RSSI"];
         [item setValue:advertisementData forKey:@"advertisementData"];
         [peripheralDataArray addObject:item];
         
@@ -145,7 +126,7 @@
     }
 }
 
-#pragma mark -table委托 table delegate
+#pragma mark -table delegate
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
      return peripheralDataArray.count;
@@ -168,7 +149,7 @@
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    //peripheral的显示名称,优先用kCBAdvDataLocalName的定义，若没有再使用peripheral name
+    //peripheral's displayed name, use definition of kCBAdvDataLocalName，if missing, then use peripheral name
     NSString *peripheralName;
     if ([advertisementData objectForKey:@"kCBAdvDataLocalName"]) {
         peripheralName = [NSString stringWithFormat:@"%@",[advertisementData objectForKey:@"kCBAdvDataLocalName"]];
@@ -179,7 +160,6 @@
     }
     
     cell.textLabel.text = peripheralName;
-    //信号和服务
     cell.detailTextLabel.text = [NSString stringWithFormat:@"RSSI: %@",RSSI];
     
     
