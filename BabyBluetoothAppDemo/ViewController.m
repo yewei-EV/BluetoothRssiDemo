@@ -30,7 +30,6 @@
 }
 
 
-
 -(void)viewDidAppear:(BOOL)animated{
     NSLog(@"viewDidAppear");
     //Stop preivous connectiong
@@ -57,22 +56,105 @@
     }];
     
     //Store previous two rssi value
-    static NSNumber * prev_rssi;
-    static NSNumber * prevprev_rssi;
+    static NSNumber * prev_rssi1;
+    static NSNumber * prevprev_rssi1;
+    static NSNumber * prev_rssi2;
+    static NSNumber * prevprev_rssi2;
+    static NSNumber * prev_rssi3;
+    static NSNumber * prevprev_rssi3;
+    
     //Handle Delegate
     [baby setBlockOnDiscoverToPeripherals:^(CBCentralManager *central, CBPeripheral *peripheral, NSDictionary *advertisementData, NSNumber *RSSI) {
-        NSNumber * avag_rssi;
-        if (prev_rssi == NULL) {
-            prev_rssi = RSSI;
+        if ([peripheral.name isEqual:@"BrtBeacon01"]) {
+            NSNumber * avag_rssi;
+            if (prev_rssi1 == NULL) {
+                prev_rssi1 = RSSI;
+            }
+            if (prevprev_rssi1 == NULL) {
+                prevprev_rssi1 = RSSI;
+            }
+            avag_rssi = @(([RSSI intValue] + [prev_rssi1 intValue] + [prevprev_rssi1 intValue])/3);
+            //NSLog(@"%@ has RSSI: %@ and %@",peripheral.name, RSSI, avag_rssi);
+        
+            //Translate RSSI value into distance
+            double distance = 0;
+            double txPower = -65;
+            if (avag_rssi == 0) {
+                distance = -1.0;
+            }
+            double ratio = [avag_rssi intValue]*1.0/txPower;
+            if (ratio < 1.0) {
+                distance = pow(ratio,10);
+            }
+            else {
+                distance = (0.89976)*pow(ratio,7.7095) + 0.111;
+            }
+            NSLog(@"%@ has RSSI: %@ and %.1f meters",peripheral.name, avag_rssi, distance);
+        
+            prevprev_rssi1 = prev_rssi1;
+            prev_rssi1 = avag_rssi;
         }
-        if (prevprev_rssi == NULL) {
-            prevprev_rssi = RSSI;
+        
+        if ([peripheral.name isEqual:@"BrtBeacon02"]) {
+            NSNumber * avag_rssi;
+            if (prev_rssi2 == NULL) {
+                prev_rssi2 = RSSI;
+            }
+            if (prevprev_rssi2 == NULL) {
+                prevprev_rssi2 = RSSI;
+            }
+            avag_rssi = @(([RSSI intValue] + [prev_rssi1 intValue] + [prevprev_rssi1 intValue])/3);
+            //NSLog(@"%@ has RSSI: %@ and %@",peripheral.name, RSSI, avag_rssi);
+            
+            //Translate RSSI value into distance
+            double distance = 0;
+            double txPower = -65;
+            if (avag_rssi == 0) {
+                distance = -1.0;
+            }
+            double ratio = [avag_rssi intValue]*1.0/txPower;
+            if (ratio < 1.0) {
+                distance = pow(ratio,10);
+            }
+            else {
+                distance = (0.89976)*pow(ratio,7.7095) + 0.111;
+            }
+            NSLog(@"%@ has RSSI: %@ and %.1f meters",peripheral.name, avag_rssi, distance);
+            
+            prevprev_rssi2 = prev_rssi2;
+            prev_rssi2 = avag_rssi;
         }
-        avag_rssi = @(([RSSI intValue] + [prev_rssi intValue] + [prevprev_rssi intValue])/3);
-        //NSLog(@"%@ has RSSI: %@ and %@",peripheral.name, RSSI, avag_rssi);
-        NSLog(@"%@ has RSSI: %@ ",peripheral.name, RSSI);
-        prevprev_rssi = prev_rssi;
-        prev_rssi = avag_rssi;
+        
+        if ([peripheral.name isEqual:@"BrtBeacon03"]) {
+            NSNumber * avag_rssi;
+            if (prev_rssi3 == NULL) {
+                prev_rssi3 = RSSI;
+            }
+            if (prevprev_rssi3 == NULL) {
+                prevprev_rssi3 = RSSI;
+            }
+            avag_rssi = @(([RSSI intValue] + [prev_rssi1 intValue] + [prevprev_rssi1 intValue])/3);
+            //NSLog(@"%@ has RSSI: %@ and %@",peripheral.name, RSSI, avag_rssi);
+            
+            //Translate RSSI value into distance
+            double distance = 0;
+            double txPower = -65;
+            if (avag_rssi == 0) {
+                distance = -1.0;
+            }
+            double ratio = [avag_rssi intValue]*1.0/txPower;
+            if (ratio < 1.0) {
+                distance = pow(ratio,10);
+            }
+            else {
+                distance = (0.89976)*pow(ratio,7.7095) + 0.111;
+            }
+            NSLog(@"%@ has RSSI: %@ and %.1f meters",peripheral.name, avag_rssi, distance);
+            
+            prevprev_rssi3 = prev_rssi3;
+            prev_rssi3 = avag_rssi;
+        }
+        
         [weakSelf insertTableView:peripheral advertisementData:advertisementData RSSI:RSSI];
     }];
     
@@ -81,7 +163,7 @@
     [baby setFilterOnDiscoverPeripherals:^BOOL(NSString *peripheralName, NSDictionary *advertisementData, NSNumber *RSSI) {
         
         //Only search device with this prefix
-        if ([peripheralName hasPrefix:@"BrtBeacon01"] ) {
+        if ([peripheralName hasPrefix:@"BrtBeacon"] ) {
             return YES;
         }
         return NO;
