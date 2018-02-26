@@ -43,6 +43,7 @@
     NSLog(@"viewWillDisappear");
 }
 
+
 #pragma mark -Bluetooth config and control
 
 //Bluetooth Delegate setting
@@ -93,9 +94,7 @@
         
             prevprev_rssi1 = prev_rssi1;
             prev_rssi1 = avag_rssi;
-        }
-        
-        if ([peripheral.name isEqual:@"BrtBeacon02"]) {
+        } else if ([peripheral.name isEqual:@"BrtBeacon02"]) {
             NSNumber * avag_rssi;
             if (prev_rssi2 == NULL) {
                 prev_rssi2 = RSSI;
@@ -124,8 +123,7 @@
             prevprev_rssi2 = prev_rssi2;
             prev_rssi2 = avag_rssi;
         }
-        
-        if ([peripheral.name isEqual:@"BrtBeacon03"]) {
+        else if ([peripheral.name isEqual:@"BrtBeacon03"]) {
             NSNumber * avag_rssi;
             if (prev_rssi3 == NULL) {
                 prev_rssi3 = RSSI;
@@ -161,16 +159,13 @@
     
     //Set searching filter
     [baby setFilterOnDiscoverPeripherals:^BOOL(NSString *peripheralName, NSDictionary *advertisementData, NSNumber *RSSI) {
-        
         //Only search device with this prefix
         if ([peripheralName hasPrefix:@"BrtBeacon"] ) {
             return YES;
         }
         return NO;
-
     }];
 
-    
     [baby setBlockOnCancelAllPeripheralsConnectionBlock:^(CBCentralManager *centralManager) {
         NSLog(@"setBlockOnCancelAllPeripheralsConnectionBlock");
     }];
@@ -184,14 +179,12 @@
     NSDictionary *scanForPeripheralsWithOptions = @{CBCentralManagerScanOptionAllowDuplicatesKey:@YES};
     //connect device->
     [baby setBabyOptionsWithScanForPeripheralsWithOptions:scanForPeripheralsWithOptions connectPeripheralWithOptions:nil scanForPeripheralsWithServices:nil discoverWithServices:nil discoverWithCharacteristics:nil];
-    
 
 }
 
 #pragma mark -UIViewController method
 //insert table data
 -(void)insertTableView:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI{
-    
     NSArray *peripherals = [peripheralDataArray valueForKey:@"peripheral"];
     if(![peripherals containsObject:peripheral]) {
         NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
