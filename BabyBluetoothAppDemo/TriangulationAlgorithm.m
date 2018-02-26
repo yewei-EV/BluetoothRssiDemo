@@ -1,11 +1,3 @@
-//
-//  TriangulationAlgorithm.m
-//  BabyBluetoothAppDemo
-//
-//  Created by Wu Cecilia on 2018-02-19.
-//  Copyright © 2018 刘彦玮. All rights reserved.
-//
-
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "TriangulationAlgorithm.h"

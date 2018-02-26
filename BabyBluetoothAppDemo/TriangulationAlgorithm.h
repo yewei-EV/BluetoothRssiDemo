@@ -1,11 +1,3 @@
-//
-//  TriangulationAlgorithm.h
-//  BluetoothAppDemo
-//
-//  Created by Wu Cecilia on 2018-02-19.
-//  Copyright © 2018 刘彦玮. All rights reserved.
-//
-
 #ifndef TriangulationAlgorithm_h
 #define TriangulationAlgorithm_h
 
