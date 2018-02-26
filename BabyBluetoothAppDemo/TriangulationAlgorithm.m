@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import "TriangulationAlgorithm.h"
 
 @implementation TriangulationCalculator
@@ -17,21 +18,21 @@
     self = [super init];
     if (self) {
         //initialize the positions of the 5 beacons
-        beaconPosition[0].h=5;
-        beaconPosition[0].v=5;
-        beaconPosition[1].h=8;
-        beaconPosition[1].v=5;
-        beaconPosition[2].h=6.5;
-        beaconPosition[2].v=2.5;
+        beaconPosition[0].h=500;
+        beaconPosition[0].v=500;
+        beaconPosition[1].h=800;
+        beaconPosition[1].v=500;
+        beaconPosition[2].h=650;
+        beaconPosition[2].v=250;
     }
     return self;
 }
 
-- (Point) calculatePosition: (int)beaconId1 beaconId2:(int)beaconId2 beaconId3:(int)beaconId3 beaconDis1:(float)beaconDis1 beaconDis2:(float)beaconDis2 beaconDis3:(float)beaconDis3
+- (CGPoint) calculatePosition: (int)beaconId1 beaconId2:(int)beaconId2 beaconId3:(int)beaconId3 beaconDis1:(float)beaconDis1 beaconDis2:(float)beaconDis2 beaconDis3:(float)beaconDis3
 {
-    Point positionCoordinate;
-    positionCoordinate.h = 0;
-    positionCoordinate.v = 0;
+    CGPoint positionCoordinate;
+    positionCoordinate.x = 0;
+    positionCoordinate.y = 0;
     
     float BeaconDistanceOne   = beaconDis1;
     float BeaconDistanceTwo   = beaconDis2;
@@ -69,10 +70,10 @@
     
     
     NSLog(@"PositionX = %f", PositionX);
-    NSLog(@"PositionX = %f", PositionY);
+    NSLog(@"PositionY = %f", PositionY);
     
-    positionCoordinate.h = PositionX;
-    positionCoordinate.v = PositionY;
+    positionCoordinate.x = PositionX;
+    positionCoordinate.y = PositionY;
     return positionCoordinate;
 }
 
