@@ -10,7 +10,7 @@ import UIKit
 
 class MapView: UIView {
     
-    let personImg: UIImageView = {
+    private let personImg: UIImageView = {
         let imageView = UIImageView(image: #imageLiteral(resourceName: "person_point"))
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
@@ -18,12 +18,12 @@ class MapView: UIView {
     }()
     
     // constraint specifying where the person image should be
-    lazy var personXConstraint: NSLayoutConstraint = {
+    private lazy var personXConstraint: NSLayoutConstraint = {
         let safeView = self.safeAreaLayoutGuide
         let anchor = self.personImg.centerXAnchor.constraint(equalTo: safeView.centerXAnchor, constant: 0)
         return anchor
     }()
-    lazy var personYConstraint: NSLayoutConstraint = {
+    private lazy var personYConstraint: NSLayoutConstraint = {
         let safeView = self.safeAreaLayoutGuide
         let anchor = self.personImg.centerYAnchor.constraint(equalTo: safeView.centerYAnchor, constant: 0)
         return anchor
@@ -31,12 +31,12 @@ class MapView: UIView {
     
     // x, y offsets from centre of screen of person image
     // update these two variables to change the location of image
-    var personXOffset: CGFloat! {
+    public var personXOffset: CGFloat! {
         didSet {
             self.personXConstraint.constant = self.personXOffset
         }
     }
-    var personYOffset: CGFloat! {
+    public var personYOffset: CGFloat! {
         didSet {
 //            self.personYConstraint.isActive = false
             self.personYConstraint.constant = self.personYOffset
@@ -55,6 +55,7 @@ class MapView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // comment out this function then image will not move upon screen touch
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let touch = touches.first {
             let position = touch.location(in: self)
