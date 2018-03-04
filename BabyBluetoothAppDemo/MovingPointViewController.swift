@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MovingPointViewController: UIViewController {
+@objc class MovingPointViewController: UIViewController {
     
     let personImg: UIImageView = {
         let imageView = UIImageView(image: #imageLiteral(resourceName: "person_point"))

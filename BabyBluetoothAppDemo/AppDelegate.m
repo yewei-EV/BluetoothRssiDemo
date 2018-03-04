@@ -1,7 +1,7 @@
 #import "AppDelegate.h"
 #import <CoreBluetooth/CoreBluetooth.h>
 #import "BabyBluetooth.h"
-
+#import "BabyBluetoothAppDemo-Swift.h"
 
 @interface AppDelegate ()
 
@@ -14,7 +14,11 @@
     // Override point for customization after application launch.
     NSArray *centralManagerIdentifiers = launchOptions[UIApplicationLaunchOptionsBluetoothCentralsKey];
     NSLog(@"%@",centralManagerIdentifiers);
-
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window.backgroundColor = [UIColor whiteColor];
+    MovingPointViewController *vc = [[MovingPointViewController alloc] init];
+    self.window.rootViewController = vc;
+    [self.window makeKeyAndVisible];
     return YES;
 }
 
