@@ -9,46 +9,20 @@
 import UIKit
 
 @objc class MovingPointViewController: UIViewController {
-    
-    let personImg: UIImageView = {
-        let imageView = UIImageView(image: #imageLiteral(resourceName: "person_point"))
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFit
-        return imageView
-    }()
-    
-    var personX: CGFloat! {
-        didSet {
-            personXConstraint.isActive = false
-            personXConstraint.constant = personX
-            personXConstraint.isActive = true
-        }
-    }
-    var personY: CGFloat! {
-        didSet {
-            personYConstraint.isActive = false
-            personYConstraint.constant = personY
-            personYConstraint.isActive = true
-        }
-    }
-    
-    lazy var personXConstraint: NSLayoutConstraint = {
-        let safeView = self.view.safeAreaLayoutGuide
-        let anchor = self.personImg.centerXAnchor.constraint(equalTo: safeView.centerXAnchor, constant: 0)
-        return anchor
-    }()
-    lazy var personYConstraint: NSLayoutConstraint = {
-        let safeView = self.view.safeAreaLayoutGuide
-        let anchor = self.personImg.centerYAnchor.constraint(equalTo: safeView.centerYAnchor, constant: 0)
-        return anchor
-    }()
+    let mapView = MapView(frame: .zero)
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(personImg)
-        personXConstraint.isActive = true
-        personYConstraint.isActive = true
-        // Do any additional setup after loading the view.
+        // TODO: dispatch another thread
+        
+        let safeView = view.safeAreaLayoutGuide
+        view.addSubview(mapView)
+        mapView.translatesAutoresizingMaskIntoConstraints = false
+        mapView.topAnchor.constraint(equalTo: safeView.topAnchor).isActive = true
+        mapView.bottomAnchor.constraint(equalTo: safeView.bottomAnchor).isActive = true
+        mapView.leadingAnchor.constraint(equalTo: safeView.leadingAnchor).isActive = true
+        mapView.trailingAnchor.constraint(equalTo: safeView.trailingAnchor).isActive = true
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -56,6 +30,23 @@ import UIKit
         // Dispose of any resources that can be recreated.
     }
     
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        if var xOffset = mapView.personXOffset, var yOffset = mapView.personYOffset {
+            xOffset = xOffset > 0 ? xOffset : -xOffset
+            yOffset = yOffset > 0 ? yOffset : -yOffset
+            let xRatio = xOffset / size.height
+            let yRatio = yOffset / size.width
+            xOffset = mapView.personXOffset > 0 ? size.width * xRatio : -size.width * xRatio
+            yOffset = mapView.personYOffset > 0 ? size.height * yRatio : -size.height * yRatio
+            mapView.personXOffset = xOffset
+            mapView.personYOffset = yOffset
+        }
+//        if UIDevice.current.orientation.isLandscape {
+//
+//        } else {
+//
+//        }
+    }
 
     /*
     // MARK: - Navigation

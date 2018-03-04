@@ -18,6 +18,7 @@
 		5762C31B20147DC0008D457A /* BabyCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = 5762C31220147DBF008D457A /* BabyCallback.m */; };
 		57BDDDD02044AF9B003E5168 /* TriangulationAlgorithm.m in Sources */ = {isa = PBXBuildFile; fileRef = 57BDDDCE2044AF9A003E5168 /* TriangulationAlgorithm.m */; };
 		C7AA2217204C8E3B009B7927 /* MovingPointViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AA2216204C8E3B009B7927 /* MovingPointViewController.swift */; };
+		C7AA221D204CA4A6009B7927 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AA221C204CA4A6009B7927 /* MapView.swift */; };
 		E1807E731B6CA29100E99C63 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E1807E721B6CA29100E99C63 /* main.m */; };
 		E1807E761B6CA29100E99C63 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E1807E751B6CA29100E99C63 /* AppDelegate.m */; };
 		E1807E791B6CA29100E99C63 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E1807E781B6CA29100E99C63 /* ViewController.m */; };
@@ -53,6 +54,7 @@
 		57BDDDCF2044AF9B003E5168 /* TriangulationAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TriangulationAlgorithm.h; sourceTree = "<group>"; };
 		C7AA2215204C8E3A009B7927 /* BabyBluetoothAppDemo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BabyBluetoothAppDemo-Bridging-Header.h"; sourceTree = "<group>"; };
 		C7AA2216204C8E3B009B7927 /* MovingPointViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovingPointViewController.swift; sourceTree = "<group>"; };
+		C7AA221C204CA4A6009B7927 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		E1807E6D1B6CA29100E99C63 /* BabyBluetoothAppDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BabyBluetoothAppDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1807E711B6CA29100E99C63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E1807E721B6CA29100E99C63 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -108,6 +110,23 @@
 			path = BabyBluetooth;
 			sourceTree = "<group>";
 		};
+		C7AA221A204CA46C009B7927 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				C7AA2216204C8E3B009B7927 /* MovingPointViewController.swift */,
+				C7AA2215204C8E3A009B7927 /* BabyBluetoothAppDemo-Bridging-Header.h */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		C7AA221B204CA48A009B7927 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				C7AA221C204CA4A6009B7927 /* MapView.swift */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
 		E1807E641B6CA29100E99C63 = {
 			isa = PBXGroup;
 			children = (
@@ -128,6 +147,8 @@
 		E1807E6F1B6CA29100E99C63 /* BabyBluetoothDemo */ = {
 			isa = PBXGroup;
 			children = (
+				C7AA221B204CA48A009B7927 /* View */,
+				C7AA221A204CA46C009B7927 /* Controller */,
 				57BDDDCF2044AF9B003E5168 /* TriangulationAlgorithm.h */,
 				57BDDDCE2044AF9A003E5168 /* TriangulationAlgorithm.m */,
 				F05F7BA31B7339E90051C68A /* Model */,
@@ -139,8 +160,6 @@
 				E1807E7D1B6CA29100E99C63 /* Images.xcassets */,
 				E1807E7F1B6CA29100E99C63 /* LaunchScreen.xib */,
 				E1807E701B6CA29100E99C63 /* Supporting Files */,
-				C7AA2216204C8E3B009B7927 /* MovingPointViewController.swift */,
-				C7AA2215204C8E3A009B7927 /* BabyBluetoothAppDemo-Bridging-Header.h */,
 			);
 			name = BabyBluetoothDemo;
 			path = BabyBluetoothAppDemo;
@@ -270,6 +289,7 @@
 				F05F7BA61B733A240051C68A /* PeripheralInfo.m in Sources */,
 				F05F7BAF1B7372300051C68A /* SVProgressHUD.m in Sources */,
 				5762C31520147DC0008D457A /* BabyCentralManager.m in Sources */,
+				C7AA221D204CA4A6009B7927 /* MapView.swift in Sources */,
 				E1807E761B6CA29100E99C63 /* AppDelegate.m in Sources */,
 				5762C31920147DC0008D457A /* BabyOptions.m in Sources */,
 				5762C31620147DC0008D457A /* BabyPeripheralManager.m in Sources */,

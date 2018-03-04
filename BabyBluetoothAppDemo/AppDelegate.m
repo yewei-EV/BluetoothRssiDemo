@@ -14,11 +14,23 @@
     // Override point for customization after application launch.
     NSArray *centralManagerIdentifiers = launchOptions[UIApplicationLaunchOptionsBluetoothCentralsKey];
     NSLog(@"%@",centralManagerIdentifiers);
+    // -------------------Testing UI------------------//
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
     MovingPointViewController *vc = [[MovingPointViewController alloc] init];
     self.window.rootViewController = vc;
     [self.window makeKeyAndVisible];
+    // ----------------end of Testing UI-------------//
+    
+    // --------how to segue from other view controller to MovingPointViewController -------------//
+    // MovingPointViewController *vc = [[MovingPointViewController alloc] init];
+    // create a thread with the following function:
+    // func(someParameter) {
+            // get x, y data
+            // compute x, y offset from centre of screen
+            // update vc.mapView.personXOffset & personYOffset
+    //}
+    // ----end of how to segue from other view controller to MovingPointViewController ----------//
     return YES;
 }
 
